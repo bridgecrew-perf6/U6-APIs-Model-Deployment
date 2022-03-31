@@ -1,7 +1,7 @@
 import requests # a lib for making HTTP requests
 import json # a lib for parsing strings/JSON objects
 
-url = "http://127.0.0.1:5000/predict?"
+url = "https://interview-flask-app.herokuapp.com/predict?"
 # add query terms
 url += "level=Junior&lang=Java&tweets=yes&phd=yes"
 
