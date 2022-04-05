@@ -1,5 +1,6 @@
 # we are going to use the flask micro web framework
 # for our web app (running our API service)
+import os
 import pickle
 from flask import Flask, jsonify, request
 
@@ -70,8 +71,27 @@ def tdidt_predict(header, tree, instance):
     # a for loop that traverses through
     # each value list
     # recurse on match with instance's value
-    # TODO: finish this
+    att_index = header.index(tree[1])
+    for i in range(2, len(tree)):
+        value_list = tree[i]
+        if value_list[1] == instance[att_index]:
+            # we have a match, recurse
+            return tdidt_predict(header, value_list[2], instance)
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5001) # TODO: turn debug off
+    # deployment notes
+    # we need to get our flask app on the web
+    # we can setup/maintain our own server OR
+    # we can use a cloud provider (AWS, GCP,
+    # Azure, DigitalOcean, Heroku, ...)
+    # we are going to use Heroku (PaaS platform as a
+    # service)
+    # there are a few ways (4) to deploy a 
+    # flask to heroku (see my youtube videos)
+    # we are going to do what I call 2.B.
+    # we are going to deploy a docker container
+    # using heroku.yml and git
+    # get the port number from the environment variable
+    port = os.environ.get("PORT", 5001)
+    app.run(debug=False, port=port, host="0.0.0.0") # TODO: turn debug off
     # when deploy to "production"
