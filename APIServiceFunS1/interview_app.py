@@ -1,6 +1,7 @@
 # we are going to use the flask micro web framework
 # for our web app (run an API service with /predict
 # endpoint)
+import os
 import pickle
 from flask import Flask, jsonify, request
 
@@ -69,9 +70,29 @@ def tdidt_predict(header, tree, instance):
     # we are at an attribute
     # find attribute value match for instance
     # for loop
-    # TODO: finish this
+    att_index = header.index(tree[1])
+    for i in range(2, len(tree)):
+        value_list = tree[i]
+        if value_list[1] == instance[att_index]:
+            # we have a match, recurse
+            return tdidt_predict(header, value_list[2], instance)
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000) # TODO: turn off debug
+    # deployment notes
+    # we need to get our web app on the web
+    # we can setup/maintain our own server OR
+    # we can use a cloud provider
+    # lots of cloud providers: AWS, GCP, Azure, DigitalOcean, 
+    # Heroku, ...
+    # we are going to use Heroku (PaaS platform as a service)
+    # lots of ways to deploy a Flask app to Heroku
+    # see my youtubes videos for 4 different ways
+    # we will do what I call 2.B.
+    # deploying a docker container using heroku.yml and git
+    # first, we need to change some app settings
+    # heroku is going to set the port for our app
+    # to use via an enviroonment variable
+    port = os.environ.get("PORT", 5000)
+    app.run(debug=False, port=port, host="0.0.0.0") # TODO: turn off debug
     # when you deploy to production
